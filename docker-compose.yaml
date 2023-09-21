@@ -10,7 +10,7 @@ services:
     restart: "unless-stopped"
 
   jellyfin:
-    image: jellyfin/jellyfin:10.8.1
+    image: jellyfin/jellyfin:${JELLYFIN_TAG}
     container_name: jellyfin
     user: ${MY_PUID}:${MY_PGID}
     ports:
@@ -27,7 +27,7 @@ services:
     # ip statica para facilitar descubrimiento
 
   sonarr:
-    image: lscr.io/linuxserver/sonarr:amd64-version-3.0.8.1507
+    image: lscr.io/linuxserver/sonarr:${SONARR_TAG}
     container_name: sonarr
     environment:
       - PUID=${MY_PUID}
@@ -46,7 +46,7 @@ services:
       - "qbittorrent"
 
   radarr:
-    image: lscr.io/linuxserver/radarr:4.1.0.6175-ls145
+    image: lscr.io/linuxserver/radarr:${RADARR_TAG}
     container_name: radarr
     environment:
       - PUID=${MY_PUID}
@@ -66,7 +66,7 @@ services:
 
 
   bazarr:
-    image: lscr.io/linuxserver/bazarr:1.1.0
+    image: lscr.io/linuxserver/bazarr:${BAZARR_TAG}
     container_name: bazarr
     environment:
       - PUID=${MY_PUID}
@@ -84,7 +84,7 @@ services:
 
   # https://hub.docker.com/r/linuxserver/jackett/
   jackett:
-    image: lscr.io/linuxserver/jackett:version-v0.20.1326
+    image: lscr.io/linuxserver/jackett:${JACKETT_TAG}
     container_name: jackett
     environment:
       - PUID=${MY_PUID}
@@ -125,4 +125,16 @@ services:
           - ${TV_DIR}:/srv/series
       ports:
           - '8085:80'
+      restart: unless-stopped
+
+  jellyseerr:
+      image: fallenbagel/jellyseerr:${JELLYSEERR_TAG}
+      container_name: jellyseerr
+      environment:
+          - LOG_LEVEL=debug
+          - TZ=${TZ}
+      ports:
+          - 5055:5055
+      volumes:
+          - ./services/jellyseerr/config:/app/config
       restart: unless-stopped
